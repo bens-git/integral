@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="#5B21B6"/>
-  <circle cx="20" cy="20" r="10" fill="#C7B5FF" opacity="0.15"/>
-  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Figtree, Arial, sans-serif" font-size="32" fill="#FFF" font-weight="700">I</text>
+  <rect width="64" height="64" rx="12" fill="#0B6E4F"/>
+  <path d="M20 44c0-8.8 7.2-16 16-16s16 7.2 16 16v4H20v-4z" fill="#063E2D" opacity="0.06"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Figtree, Arial, sans-serif" font-size="32" fill="#FFFFFF" font-weight="700">I</text>
 </svg>
