@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\ChatController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -14,6 +15,14 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/', function () {
     return Inertia::render('LandingPage');
+});
+
+// Chat endpoints (authenticated)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/chat/messages', [ChatController::class, 'index'])->name('chat.messages.index');
+    Route::post('/chat/messages', [ChatController::class, 'store'])->name('chat.messages.store');
+    Route::get('/chat/online', [ChatController::class, 'online'])->name('chat.online');
+    Route::post('/chat/ping', [ChatController::class, 'ping'])->name('chat.ping');
 });
 
 // Demo login (pick a nickname to sign in instantly)

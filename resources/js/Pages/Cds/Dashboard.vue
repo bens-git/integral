@@ -2,6 +2,12 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, usePage } from "@inertiajs/vue3";
 import { computed } from "vue";
+import StoreProposal from '@/Components/StoreProposal.vue';
+
+function refresh() {
+  // reload this page's props — fallback to full reload since Inertia core isn't available
+  window.location.reload();
+}
 
 const page = usePage();
 const stats = computed(() => page.props.stats || {});
@@ -71,21 +77,7 @@ const statCards = computed(() => {
                     </div>
 
                     <div class="d-flex ga-2 mt-4 mt-md-0">
-                        <v-btn
-                            color="primary"
-                            prepend-icon="mdi-plus"
-                            :href="route('cds.proposals.create')"
-                        >
-                            New Proposal
-                        </v-btn>
-
-                        <v-btn
-                            variant="outlined"
-                            prepend-icon="mdi-help-circle-outline"
-                            :href="route('cds.issues.create')"
-                        >
-                            New Issue
-                        </v-btn>
+                        <StoreProposal @proposal-created="refresh" />
                     </div>
                 </div>
             </v-card>
