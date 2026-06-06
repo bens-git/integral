@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Cds;
 
 use App\Http\Controllers\Controller;
-use App\Models\Csd\DecisionIssue;
-use App\Models\Csd\DeliberationThread;
-use App\Models\Csd\DeliberationMessage;
-use App\Models\Csd\Participant;
+use App\Models\Cds\DecisionIssue;
+use App\Models\Cds\DeliberationThread;
+use App\Models\Cds\DeliberationMessage;
+use App\Models\Cds\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Cds;
 
 use App\Http\Controllers\Controller;
-use App\Models\Csd\DecisionIssue;
-use App\Models\Csd\Proposal;
-use App\Models\Csd\Participant;
+use App\Models\Cds\DecisionIssue;
+use App\Models\Cds\Proposal;
+use App\Models\Cds\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;

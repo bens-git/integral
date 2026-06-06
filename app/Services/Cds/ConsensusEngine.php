@@ -2,7 +2,7 @@
 
 namespace App\Services\Cds;
 
-use App\Models\Csd\ConsensusModel;
+use App\Models\Cds\ConsensusModel;
 
 class ConsensusEngine
 {

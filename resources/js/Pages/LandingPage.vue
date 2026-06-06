@@ -6,7 +6,6 @@
         <Head title="The Five Systems — INTEGRAL" />
         <h1 class="text-h4 mb-2">The Five Systems</h1>
         <p class="text-subtitle-1 mb-4">Integral coordinates production and governance through five interdependent systems: CDS, OAD, ITC, COS, and FRS — a cybernetic feedback loop without markets or central authority.</p>
-        <v-btn color="primary" class="mr-3" @click="$inertia.visit(route('cds.dashboard'))">Open CDS</v-btn>
         <v-btn text href="https://integralcollective.io/system/" target="_blank">View documentation</v-btn>
       </v-col>
     </v-row>
