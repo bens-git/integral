@@ -1,114 +1,116 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Link } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
-const stats = [
-    { name: 'Active Proposals', value: 12, href: '/cds/proposals?status=active', color: 'bg-blue-500' },
-    { name: 'Issues in Deliberation', value: 5, href: '/cds/issues?status=deliberation', color: 'bg-green-500' },
-    { name: 'Consensus Reached', value: 8, href: '/cds/issues?status=decided', color: 'bg-purple-500' },
-    { name: 'Pending Decisions', value: 3, href: '/cds/decisions', color: 'bg-orange-500' },
-];
+const page = usePage();
+const stats = computed(() => page.props.stats || {});
+const recent = computed(() => page.props.recentActivity || []);
 
-const recentActivity = [
-    { id: 1, type: 'proposal', title: 'Community Garden Initiative', action: 'submitted', time: '2 hours ago' },
-    { id: 2, type: 'issue', title: 'Solar Panel Installation', action: 'entered deliberation', time: '5 hours ago' },
-    { id: 3, type: 'consensus', title: 'Bike Lane Extension', action: 'consensus reached', time: '1 day ago' },
-    { id: 4, type: 'decision', title: 'Tool Library Expansion', action: 'dispatched to COS', time: '2 days ago' },
-];
+const statCards = computed(() => {
+  const s = stats.value || {};
+  return [
+    { key: 'active_proposals', label: 'Active Proposals', value: s.active_proposals ?? 0, href: route('cds.proposals.index') + '?status=active' },
+    { key: 'issues_in_deliberation', label: 'Issues in Deliberation', value: s.issues_in_deliberation ?? 0, href: route('cds.issues.index') + '?status=deliberation' },
+    { key: 'consensus_reached', label: 'Consensus Reached', value: s.consensus_reached ?? 0, href: route('cds.issues.index') + '?status=decided' },
+    { key: 'pending_decisions', label: 'Pending Decisions', value: s.pending_decisions ?? 0, href: route('cds.decisions.index') },
+  ];
+});
 </script>
 
 <template>
-    <Head title="CDS Dashboard" />
+  <Head title="CDS Dashboard" />
 
-    <AuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                CDS Dashboard
-            </h2>
-        </template>
+  <AuthenticatedLayout>
+    <template #header>
+      <h2 class="text-xl font-semibold leading-tight text-gray-800">CDS Dashboard</h2>
+    </template>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <!-- Stats Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div v-for="stat in stats" :key="stat.name"
-                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <Link :href="stat.href" class="block p-6">
-                            <div class="flex items-center">
-                                <div :class="stat.color" class="w-12 h-12 rounded-lg flex items-center justify-center mr-4">
-                                    <span class="text-white font-bold text-lg">{{ stat.value }}</span>
-                                </div>
-                                <div>
-                                    <p class="text-gray-500 text-sm">{{ stat.name }}</p>
-                                </div>
-                            </div>
-                        </Link>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-8">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-                        <div class="flex flex-wrap gap-4">
-                            <Link :href="route('cds.proposals.create')"
-                                class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                New Proposal
-                            </Link>
-                            <Link :href="route('cds.proposals.index')"
-                                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                View Proposals
-                            </Link>
-                            <Link :href="route('cds.issues.index')"
-                                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                View Issues
-                            </Link>
-                            <Link :href="route('cds.decisions.index')"
-                                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                Decision Ledger
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Activity -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-                        <div class="flow-root">
-                            <ul role="list" class="-mb-8">
-                                <li v-for="(activity, activityIdx) in recentActivity" :key="activity.id">
-                                    <div class="relative pb-8">
-                                        <span v-if="activityIdx !== recentActivity.length - 1"
-                                            class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
-                                            aria-hidden="true" />
-                                        <div class="relative flex space-x-3">
-                                            <div>
-                                                <span class="h-8 w-8 rounded-full bg-gray-500 flex items-center justify-center ring-8 ring-white">
-                                                    <svg class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </span>
-                                            </div>
-                                            <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                <div>
-                                                    <p class="text-sm text-gray-500">
-                                                        <span class="font-medium text-gray-900">{{ activity.title }}</span>
-                                                        was {{ activity.action }}
-                                                    </p>
-                                                </div>
-                                                <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                    <time :datetime="activity.time">{{ activity.time }}</time>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+    <v-container class="py-8">
+      <v-row>
+        <v-col cols="12">
+          <v-card class="pa-4 mb-6">
+            <div class="d-flex justify-space-between align-center">
+              <div>
+                <h3 class="text-h6">Collaborative Decision System</h3>
+                <div class="text-subtitle-2">Overview of CDS activity and quick actions</div>
+              </div>
+              <div>
+                <v-btn small text :href="route('cds.proposals.create')">New Proposal</v-btn>
+                <v-btn small text :href="route('cds.issues.create')">New Issue</v-btn>
+              </div>
             </div>
-        </div>
-    </AuthenticatedLayout>
+          </v-card>
+        </v-col>
+
+        <v-col cols="12">
+          <v-row>
+            <v-col cols="12" sm="6" md="3" v-for="card in statCards" :key="card.key">
+              <v-card class="pa-4">
+                <div class="d-flex align-center justify-space-between">
+                  <div>
+                    <div class="text-subtitle-2 text--secondary">{{ card.label }}</div>
+                    <div class="text-h5 font-weight-medium">{{ card.value }}</div>
+                  </div>
+                  <div>
+                    <v-btn small icon :href="card.href">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </v-btn>
+                  </div>
+                </div>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-col>
+
+        <v-col cols="12" md="8">
+          <v-card class="pa-4">
+            <h3 class="text-h6 mb-3">Recent Activity</h3>
+            <v-list two-line>
+              <v-list-item v-for="item in recent" :key="item.id">
+                <div class="v-list-item-content">
+                  <div class="font-medium">{{ item.title }}</div>
+                  <div class="text-caption">{{ item.action }} • {{ item.time }}</div>
+                </div>
+                <div class="v-list-item-action">
+                  <v-btn icon :href="item.type === 'proposal' ? route('cds.proposals.show', item.id) : route('cds.deliberation.show', item.id)">
+                    <v-icon>mdi-open-in-new</v-icon>
+                  </v-btn>
+                </div>
+              </v-list-item>
+              <v-list-item v-if="!recent || recent.length === 0">
+                <div class="v-list-item-content">No recent activity</div>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </v-col>
+
+        <v-col cols="12" md="4">
+          <v-card class="pa-4 mb-4">
+            <h3 class="text-h6 mb-2">Status Breakdown</h3>
+            <v-list dense>
+              <v-list-item v-for="(count, status) in stats.proposals_by_status || {}" :key="status">
+                <v-list-item-content>
+                  <div class="d-flex justify-space-between">
+                    <div class="text-caption">{{ status }}</div>
+                    <div class="font-medium">{{ count }}</div>
+                  </div>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="!stats.proposals_by_status || Object.keys(stats.proposals_by_status || {}).length === 0">
+                <v-list-item-content>No data</v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card>
+
+          <v-card class="pa-4">
+            <h3 class="text-h6 mb-2">Quick Links</h3>
+            <v-btn block color="primary" class="mb-2" :href="route('cds.proposals.create')">New Proposal</v-btn>
+            <v-btn block outlined :href="route('cds.issues.index')">All Issues</v-btn>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </AuthenticatedLayout>
 </template>
+

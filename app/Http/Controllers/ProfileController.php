@@ -18,8 +18,9 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
+        // In demo mode email verification is disabled — always report false
         return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'mustVerifyEmail' => false,
             'status' => session('status'),
         ]);
     }

@@ -20,9 +20,7 @@ use Inertia\Inertia;
 Route::middleware(['auth', 'verified'])->prefix('cds')->name('cds.')->group(function () {
     
     // Dashboard
-    Route::get('/', function () {
-        return Inertia::render('Cds/Dashboard');
-    })->name('dashboard');
+    Route::get('/', [App\Http\Controllers\Cds\DashboardController::class, 'index'])->name('dashboard');
 
     // Proposals
     Route::get('/proposals', [ProposalController::class, 'index'])->name('proposals.index');

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('decision_dispatch', function (Blueprint $table) {
+        Schema::create('decision_dispatches', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('consensus_id')->constrained('consensus_models')->cascadeOnDelete();
             $table->foreignUuid('issue_id')->constrained('decision_issues')->cascadeOnDelete();
@@ -37,6 +37,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('decision_dispatch');
+        Schema::dropIfExists('decision_dispatches');
     }
 };

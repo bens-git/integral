@@ -1,6 +1,87 @@
-/* Tailwind removed — minimal global styles */
-:root { --font-sans: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+/* Tailwind removed — compatibility utility classes and global styles
+   This file provides a small set of utility classes that mirror the
+   Tailwind utilities used throughout the project so the UI doesn't
+   immediately break while we migrate to Vuetify components.
+   Long-term: replace these utilities with Vuetify components and remove this file. */
+
+:root {
+  --font-sans: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
 html, body, #app { height: 100%; }
 body { font-family: var(--font-sans); margin: 0; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 a { color: inherit; text-decoration: none; }
-/* Add project-specific global utilities here as needed */
+
+/* Layout utilities */
+.min-h-screen { min-height: 100vh; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.max-w-7xl { max-width: 80rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.px-8 { padding-left: 2rem; padding-right: 2rem; }
+.py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.h-16 { height: 4rem; }
+.h-9 { height: 2.25rem; }
+.h-8 { height: 2rem; }
+.h-12 { height: 3rem; }
+.w-auto { width: auto; }
+.block { display: block; }
+.inline-block { display: inline-block; }
+.flex { display: flex; }
+.grid { display: grid; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.ms-auto { margin-left: auto; }
+.me-2 { margin-right: 0.5rem; }
+.ms-6 { margin-left: 1.5rem; }
+.space-x-8 > :not([hidden]) ~ :not([hidden]) { margin-left: 2rem; }
+.rounded-md { border-radius: 0.375rem; }
+.overflow-visible { overflow: visible; }
+.align-middle { vertical-align: middle; }
+.text-caption { font-size: 0.8125rem; color: #6b7280; }
+.font-medium { font-weight: 500; }
+
+/* Display helpers */
+.hidden { display: none !important; }
+.visible { display: block !important; }
+
+/* Basic colors */
+.bg-gray-100 { background-color: #f3f4f6; }
+.bg-white { background-color: #ffffff; }
+.border-b { border-bottom: 1px solid #e5e7eb; }
+.border-gray-100 { border-color: #f3f4f6; }
+.text-gray-500 { color: #6b7280; }
+.text-gray-800 { color: #1f2937; }
+.text-sm { font-size: 0.875rem; }
+
+/* Buttons & forms */
+.inline-flex { display: inline-flex; }
+.px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.px-1 { padding-left: 0.25rem; padding-right: 0.25rem; }
+.text-sm { font-size: 0.875rem; }
+.leading-4 { line-height: 1rem; }
+.transition { transition: all .15s ease-in-out; }
+.focus\:outline-none:focus { outline: none; }
+.hover\:text-gray-700:hover { color: #374151; }
+
+/* Responsive conveniences (approximate): apply at small screens and up */
+.sm\:flex { display: flex; }
+.sm\:hidden { display: none; }
+.sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+
+/* Simple utility to keep dropdowns visible */
+.relative { position: relative; }
+
+/* Accessibility */
+.focus-visible:focus { outline: 2px solid rgba(11,110,79,0.2); outline-offset: 2px; }
+
+/* Misc helpers used in a few places */
+.text-center { text-align: center; }
+.mt-3 { margin-top: 0.75rem; }
+.pb-3 { padding-bottom: 0.75rem; }
+.pt-2 { padding-top: 0.5rem; }
+
+/* End of compatibility utilities — remove after full migration */
