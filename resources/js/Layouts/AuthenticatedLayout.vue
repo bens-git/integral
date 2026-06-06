@@ -10,7 +10,6 @@ import ChatDrawer from '@/Components/ChatDrawer.vue'
 
 const drawer = ref(false)
 const chatDrawer = ref(false)
-const unreadCount = ref(0)
 
 const navigation = [
     {
@@ -166,21 +165,6 @@ const navigation = [
         </v-main>
 
         <!-- Chat Drawer (always present in layout) -->
-        <ChatDrawer v-model="chatDrawer" @unread-count="unreadCount = $event" />
-
-        <!-- Persistent chat handle (fixed on right) -->
-        <div style="position:fixed; right:12px; top:50%; transform:translateY(-50%); z-index:1400;">
-            <v-badge :content="unreadCount" color="error" v-if="unreadCount > 0" overlap>
-              <template #badge>
-                <span style="min-width:18px; display:inline-block; text-align:center; font-size:12px">{{ unreadCount }}</span>
-              </template>
-              <v-btn icon color="primary" @click.prevent="chatDrawer = !chatDrawer" aria-label="Open chat">
-                  <v-icon>mdi-chat</v-icon>
-              </v-btn>
-            </v-badge>
-            <v-btn v-else icon color="primary" @click.prevent="chatDrawer = !chatDrawer" aria-label="Open chat" style="margin-left:4px">
-                <v-icon>mdi-chat</v-icon>
-            </v-btn>
-        </div>
+        <ChatDrawer v-model="chatDrawer" />
     </v-app>
 </template>

@@ -2,6 +2,7 @@ import '../css/app.css';
 import './bootstrap';
 import vuetify from './plugins/vuetify'
 import { VApp } from 'vuetify/components';
+import '@mdi/font/css/materialdesignicons.css' 
 
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
