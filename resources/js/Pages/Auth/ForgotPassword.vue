@@ -17,7 +17,7 @@ const submit = () => { form.post(route('password.email')); };
     </div>
 
     <div v-if="status">
-      <v-alert type="success" dense>{{ status }}</v-alert>
+      <v-alert type="success" density="comfortable">{{ status }}</v-alert>
     </div>
 
     <v-form @submit.prevent="submit">

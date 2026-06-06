@@ -17,4 +17,4 @@ Route::get('/', function () {
 });
 
 require __DIR__.'/auth.php';
-require __DIR__.'/csd.php';
+require __DIR__.'/cds.php';

@@ -19,7 +19,7 @@ const submit = () => {
     <Head title="Log in" />
 
     <div v-if="status">
-      <v-alert type="success" dense>{{ status }}</v-alert>
+      <v-alert type="success" density="comfortable">{{ status }}</v-alert>
     </div>
 
     <v-form @submit.prevent="submit">
@@ -51,6 +51,7 @@ const submit = () => {
       />
 
       <div class="d-flex justify-end align-center mt-4">
+        <Link :href="route('register')" class="me-4">Register</Link>
         <Link v-if="canResetPassword" :href="route('password.request')" class="me-4">Forgot your password?</Link>
         <v-btn color="primary" type="submit" :loading="form.processing">Log in</v-btn>
       </div>

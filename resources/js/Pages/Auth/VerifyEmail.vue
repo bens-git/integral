@@ -18,7 +18,7 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
     </div>
 
     <div v-if="verificationLinkSent">
-      <v-alert type="success" dense>A new verification link has been sent to your email.</v-alert>
+      <v-alert type="success" density="comfortable">A new verification link has been sent to your email.</v-alert>
     </div>
 
     <v-form @submit.prevent="submit">

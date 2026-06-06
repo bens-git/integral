@@ -35,11 +35,11 @@ export default defineConfig({
 
     server: {
         host: true,
-        port: 8097,
+        port: 8098,
         strictPort: true,
         hmr: {
             host: "192.168.0.146",
-            port: 8097,
+            port: 8098,
         },
         cors: true,
     },

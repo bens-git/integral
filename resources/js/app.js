@@ -1,6 +1,7 @@
 import '../css/app.css';
 import './bootstrap';
 import vuetify from './plugins/vuetify'
+import { VApp } from 'vuetify/components';
 
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
@@ -18,10 +19,10 @@ createInertiaApp({
             import.meta.glob('./Pages/**/*.vue'),
         ),
     setup({ el, App, props, plugin }) {
-        return createApp({ render: () => h(App, props) })
+        return createApp({ render: () => h(VApp, null, () => h(App, props)) })
             .use(plugin)
-            .use(ZiggyVue, Ziggy)   
-      .use(vuetify)
+            .use(ZiggyVue, Ziggy)
+            .use(vuetify)
             .mount(el);
     },
     progress: {
