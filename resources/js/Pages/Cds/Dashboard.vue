@@ -1,8 +1,9 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head, usePage, router } from "@inertiajs/vue3";
+
 import { computed } from "vue";
-import StoreProposal from '@/Components/StoreProposal.vue';
+import StoreProposalDialog from '@/Components/StoreProposalDialog.vue';
 
 function refresh() {
   // reload this page's props — fallback to full reload since Inertia core isn't available
@@ -12,6 +13,10 @@ function refresh() {
 const page = usePage();
 const stats = computed(() => page.props.stats || {});
 const recent = computed(() => page.props.recentActivity || []);
+
+function goProposals() {
+    router.visit(route('cds.proposals.index'));
+}
 
 const statCards = computed(() => {
     const s = stats.value || {};
@@ -77,7 +82,8 @@ const statCards = computed(() => {
                     </div>
 
                     <div class="d-flex ga-2 mt-4 mt-md-0">
-                        <StoreProposal @proposal-created="refresh" />
+                        <v-btn variant="text" class="me-2" @click.prevent="goProposals">View Proposals</v-btn>
+                        <StoreProposalDialog @proposal-created="refresh" />
                     </div>
                 </div>
             </v-card>

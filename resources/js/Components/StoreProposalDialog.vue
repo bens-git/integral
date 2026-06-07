@@ -21,10 +21,10 @@
             />
 
             <v-textarea
-              v-model="form.body"
+              v-model="form.description"
               label="Description"
-              :error="!!form.errors.body || (showClientErrors && !form.body)"
-              :error-messages="form.errors.body || (showClientErrors && !form.body ? ['Description is required'] : [])"
+              :error="!!form.errors.description || (showClientErrors && !form.description)"
+              :error-messages="form.errors.description || (showClientErrors && !form.description ? ['Description is required'] : [])"
               rows="6"
               required
             />
@@ -47,11 +47,11 @@ import { useForm } from '@inertiajs/vue3';
 
 const emit = defineEmits(['proposal-created']);
 const dialog = ref(false);
-const form = useForm({ title: '', body: '' });
+const form = useForm({ title: '', description: '', category: 'policy', priority: 'normal', scope: null });
 const showClientErrors = ref(false);
 
 const isValid = computed(() => {
-  return form.title && form.title.trim().length > 0 && form.body && form.body.trim().length > 0;
+  return form.title && form.title.trim().length > 0 && form.description && form.description.trim().length > 0;
 });
 
 function close() {
@@ -67,11 +67,15 @@ function submit() {
   form.post(route('cds.proposals.store'), {
     onSuccess: () => {
       dialog.value = false;
-      form.reset();
+      form.reset('title','description','category','priority','scope');
       showClientErrors.value = false;
       // emit so parent can refresh
       emit('proposal-created');
     },
+    onError: (errors) => {
+      // ensure client shows server errors
+      showClientErrors.value = true;
+    }
   });
 }
 </script>
