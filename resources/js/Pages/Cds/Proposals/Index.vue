@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, Link, router } from '@inertiajs/vue3'
 import ProposalDialog from '@/Components/ProposalDialog.vue'
+import StoreProposalDialog from '@/Components/StoreProposalDialog.vue'
 
 defineProps({
   proposals: Object,
@@ -26,6 +27,10 @@ function filterByStatus(status) {
 
 function formatDate(date) {
   return new Date(date).toLocaleDateString()
+}
+
+function refresh() {
+  router.get(route('cds.proposals.index'), {}, { preserveState: true })
 }
 </script>
 
@@ -66,9 +71,7 @@ function formatDate(date) {
 
           <v-spacer />
 
-          <Link :href="route('cds.proposals.create')">
-            <v-btn color="primary">New Proposal</v-btn>
-          </Link>
+          <StoreProposalDialog @proposal-created="refresh" />
         </div>
       </v-card>
 
@@ -132,9 +135,11 @@ function formatDate(date) {
               <tr v-if="!proposals.data.length">
                 <td colspan="6" class="text-center pa-6">
                   No proposals found.
-                  <Link :href="route('cds.proposals.create')">
-                    Create one?
-                  </Link>
+                  <StoreProposalDialog @proposal-created="refresh">
+                    <template #activator="{ props }">
+                      <v-btn text v-bind="props">Create one?</v-btn>
+                    </template>
+                  </StoreProposalDialog>
                 </td>
               </tr>
             </tbody>
