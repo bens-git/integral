@@ -15,7 +15,7 @@ class DecisionIssue extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'proposal_id',
+        'submission_id',
         'node_id',
         'framed_problem',
         'scope',
@@ -51,7 +51,7 @@ class DecisionIssue extends Model
 
     public function proposal(): BelongsTo
     {
-        return $this->belongsTo(Submission::class, 'proposal_id');
+        return $this->belongsTo(Submission::class, 'submission_id');
     }
 
     public function facilitator(): BelongsTo

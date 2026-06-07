@@ -15,7 +15,7 @@ class SystemSignal extends Model
 
     protected $fillable = [
         'node_id',
-        'proposal_id',
+        'submission_id',
         'issue_id',
         'source',
         'signal_type',
@@ -45,7 +45,7 @@ class SystemSignal extends Model
 
     public function proposal(): BelongsTo
     {
-        return $this->belongsTo(Submission::class, 'proposal_id');
+        return $this->belongsTo(Submission::class, 'submission_id');
     }
 
     public function issue(): BelongsTo

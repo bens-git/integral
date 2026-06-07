@@ -54,17 +54,17 @@ class Submission extends Model
 
     public function validationEvents(): HasMany
     {
-        return $this->hasMany(ValidationEvent::class, 'proposal_id');
+        return $this->hasMany(ValidationEvent::class, 'submission_id');
     }
 
     public function decisionIssue(): BelongsTo
     {
-        return $this->belongsTo(DecisionIssue::class, 'proposal_id', 'proposal_id');
+        return $this->belongsTo(DecisionIssue::class, 'submission_id', 'submission_id');
     }
 
     public function systemSignals(): HasMany
     {
-        return $this->hasMany(SystemSignal::class, 'proposal_id');
+        return $this->hasMany(SystemSignal::class, 'submission_id');
     }
 
     public function supersedes(): BelongsTo

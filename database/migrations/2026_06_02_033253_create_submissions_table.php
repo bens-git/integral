@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('submitter_id')->constrained('participants')->cascadeOnDelete();
             // type of submission (proposal, objection, evidence, comment, signal)
-            $table->enum('submission_type', ['proposal','objection','evidence','comment','signal'])->default('proposal')->after('submitter_id');
+            $table->enum('submission_type', ['proposal','objection','evidence','comment','signal'])->default('proposal');
             $table->foreignUuid('node_id')->nullable();
             $table->string('title');
             $table->text('description');

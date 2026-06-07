@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('decision_issues', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('proposal_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('submission_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('node_id')->nullable();
             $table->text('framed_problem');
             $table->text('scope')->nullable();

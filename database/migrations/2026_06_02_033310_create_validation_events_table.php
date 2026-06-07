@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('validation_events', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('proposal_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('submission_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('validator_id')->constrained('participants')->cascadeOnDelete();
             $table->foreignUuid('node_id')->nullable();
             $table->string('result'); // valid, invalid, needs_revision, pending

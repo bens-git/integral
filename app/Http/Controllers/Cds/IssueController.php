@@ -59,7 +59,7 @@ class IssueController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'proposal_id' => 'required|exists:submissions,id',
+            'submission_id' => 'required|exists:submissions,id',
             'framed_problem' => 'required|string',
             'scope' => 'nullable|string',
             'success_criteria' => 'nullable|string',

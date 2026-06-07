@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('system_signals', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('node_id')->nullable();
-            $table->foreignUuid('proposal_id')->nullable();
+            $table->foreignUuid('submission_id')->nullable();
             $table->foreignUuid('issue_id')->nullable();
             $table->string('source'); // frs, cos, oad, itc, external_api, manual
             $table->string('signal_type'); // alert, recommendation, constraint_violation, resource_warning, fairness_issue
