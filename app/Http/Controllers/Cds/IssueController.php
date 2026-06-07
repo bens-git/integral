@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Cds;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cds\DecisionIssue;
-use App\Models\Cds\Proposal;
+use App\Models\Cds\Submission;
 use App\Models\Cds\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +48,7 @@ class IssueController extends Controller
         ]);
     }
 
-    public function create(Proposal $proposal = null)
+    public function create(Submission $proposal = null)
     {
         return Inertia::render('Cds/Issues/Create', [
             'proposal' => $proposal,
@@ -59,7 +59,7 @@ class IssueController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'proposal_id' => 'required|exists:proposals,id',
+            'proposal_id' => 'required|exists:submissions,id',
             'framed_problem' => 'required|string',
             'scope' => 'nullable|string',
             'success_criteria' => 'nullable|string',

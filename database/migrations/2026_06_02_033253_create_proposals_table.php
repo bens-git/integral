@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proposals', function (Blueprint $table) {
+        Schema::create('submissions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('submitter_id')->constrained('participants')->cascadeOnDelete();
+            // type of submission (proposal, objection, evidence, comment, signal)
+            $table->enum('submission_type', ['proposal','objection','evidence','comment','signal'])->default('proposal')->after('submitter_id');
             $table->foreignUuid('node_id')->nullable();
             $table->string('title');
             $table->text('description');
@@ -43,6 +45,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proposals');
+        Schema::dropIfExists('submissions');
     }
 };

@@ -43,25 +43,25 @@ const recent = computed(() => page.props.recentProposals || []);
 
                         <v-col cols="12" sm="6">
                             <v-card class="pa-4">
-                                <div class="text-h6">Proposals</div>
-                                <div class="text-h4">{{ stats.proposals ?? '—' }}</div>
-                                <div class="text-caption">All CDS proposals</div>
+                                <div class="text-h6">Submissions</div>
+                                <div class="text-h4">{{ stats.submissions ?? '—' }}</div>
+                                <div class="text-caption">All CDS submissions</div>
                             </v-card>
                         </v-col>
                     </v-row>
 
                     <v-card class="pa-4 mt-4">
-                        <h3 class="text-h6 mb-2">Recent proposals</h3>
+                        <h3 class="text-h6 mb-2">Recent submissions</h3>
                         <v-list two-line>
                             <v-list-item v-for="p in recent" :key="p.id">
                                 <div class="v-list-item-content">
-                                    <Link :href="route('cds.proposals.show', p.id)">
+                                    <Link :href="route('cds.submissions.show', p.id)">
                                         <div class="font-medium">{{ p.title }}</div>
                                     </Link>
                                     <div class="text-caption">{{ p.status }} • {{ new Date(p.created_at).toLocaleString() }}</div>
                                 </div>
                                 <div class="v-list-item-action">
-                                    <v-btn icon :href="route('cds.proposals.show', p.id)">
+                                    <v-btn icon :href="route('cds.submissions.show', p.id)">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
                                     </v-btn>
                                 </div>
@@ -77,7 +77,7 @@ const recent = computed(() => page.props.recentProposals || []);
                     <v-card class="pa-4 mb-4">
                         <h3 class="text-h6">Proposals by status</h3>
                         <v-list dense>
-                            <v-list-item v-for="(count, status) in stats.proposals_by_status || {}" :key="status">
+                            <v-list-item v-for="(count, status) in stats.submissions_by_status || {}" :key="status">
                                 <v-list-item-content>
                                     <div class="d-flex justify-space-between">
                                         <div>{{ status }}</div>
@@ -93,7 +93,7 @@ const recent = computed(() => page.props.recentProposals || []);
 
                     <v-card class="pa-4">
                         <h3 class="text-h6">Quick actions</h3>
-                        <v-btn block color="primary" class="mb-2" :href="route('cds.proposals.create')">New Proposal</v-btn>
+                        <v-btn block color="primary" class="mb-2" :href="route('cds.submissions.create')">New Submission</v-btn>
                         <v-btn block outlined :href="route('cds.issues.create')">New Issue</v-btn>
                     </v-card>
                 </v-col>

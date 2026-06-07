@@ -22,7 +22,7 @@ const statusColors = {
 }
 
 function filterByStatus(status) {
-  router.get(route('cds.proposals.index'), { status }, { preserveState: true })
+  router.get(route('cds.submissions.index'), { status }, { preserveState: true })
 }
 
 function formatDate(date) {
@@ -30,7 +30,7 @@ function formatDate(date) {
 }
 
 function refresh() {
-  router.get(route('cds.proposals.index'), {}, { preserveState: true })
+  router.get(route('cds.submissions.index'), {}, { preserveState: true })
 }
 </script>
 

@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Cds;
 
-// Backwards-compatible shim: the real controller is SubmissionController
+use App\Http\Controllers\Controller;
+use App\Models\Cds\Submission;
+use App\Models\Cds\Participant;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use App\Services\EmbeddingService;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
-class ProposalController extends SubmissionController
+class SubmissionController extends Controller
 {
-    // Intentionally empty. Use SubmissionController.
-}
-
     public function index(Request $request)
     {
         $proposals = Submission::with(['submitter'])

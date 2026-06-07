@@ -8,14 +8,14 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('proposals', function (Blueprint $table) {
+        Schema::table('submissions', function (Blueprint $table) {
             $table->json('embedding')->nullable()->after('content');
         });
     }
 
     public function down()
     {
-        Schema::table('proposals', function (Blueprint $table) {
+        Schema::table('submissions', function (Blueprint $table) {
             $table->dropColumn('embedding');
         });
     }

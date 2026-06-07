@@ -36,7 +36,7 @@ const page = usePage()
 const proposal = computed(() => page.props.proposal ?? null)
 
 function goBack() {
-  let href = route('cds.proposals.index');
+  let href = route('cds.submissions.index');
   try {
     const url = new URL(href);
     href = url.pathname + url.search + url.hash;

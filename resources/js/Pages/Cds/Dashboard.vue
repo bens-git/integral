@@ -15,7 +15,7 @@ const stats = computed(() => page.props.stats || {});
 const recent = computed(() => page.props.recentActivity || []);
 
 function goProposals() {
-    router.visit(route('cds.proposals.index'));
+    router.visit(route('cds.submissions.index'));
 }
 
 const statCards = computed(() => {
@@ -25,7 +25,7 @@ const statCards = computed(() => {
             key: "active_proposals",
             label: "Active Proposals",
             value: s.active_proposals ?? 0,
-            href: route("cds.proposals.index") + "?status=active",
+            href: route("cds.submissions.index") + "?status=active",
         },
         {
             key: "issues_in_deliberation",

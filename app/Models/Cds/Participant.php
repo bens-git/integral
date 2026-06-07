@@ -48,7 +48,7 @@ class Participant extends Authenticatable
 
     public function proposals(): HasMany
     {
-        return $this->hasMany(Proposal::class, 'submitter_id');
+        return $this->hasMany(Submission::class, 'submitter_id');
     }
 
     public function validationEvents(): HasMany

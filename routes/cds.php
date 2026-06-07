@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Cds\ProposalController;
+use App\Http\Controllers\Cds\SubmissionController;
 use App\Http\Controllers\Cds\IssueController;
 use App\Http\Controllers\Cds\DeliberationController;
 use App\Http\Controllers\Cds\ConsensusController;
@@ -23,13 +23,13 @@ Route::middleware(['auth', 'verified'])->prefix('cds')->name('cds.')->group(func
     Route::get('/', [App\Http\Controllers\Cds\DashboardController::class, 'index'])->name('dashboard');
 
     // Proposals
-    Route::get('/proposals', [ProposalController::class, 'index'])->name('proposals.index');
-    Route::get('/proposals/create', [ProposalController::class, 'create'])->name('proposals.create');
-    Route::post('/proposals', [ProposalController::class, 'store'])->name('proposals.store');
-    Route::get('/proposals/{proposal}', [ProposalController::class, 'show'])->name('proposals.show');
-    Route::get('/proposals/{proposal}/edit', [ProposalController::class, 'edit'])->name('proposals.edit');
-    Route::patch('/proposals/{proposal}', [ProposalController::class, 'update'])->name('proposals.update');
-    Route::post('/proposals/{proposal}/submit', [ProposalController::class, 'submit'])->name('proposals.submit');
+    Route::get('/submissions', [SubmissionController::class, 'index'])->name('submissions.index');
+    Route::get('/submissions/create', [SubmissionController::class, 'create'])->name('submissions.create');
+    Route::post('/submissions', [SubmissionController::class, 'store'])->name('submissions.store');
+    Route::get('/submissions/{submission}', [SubmissionController::class, 'show'])->name('submissions.show');
+    Route::get('/submissions/{submission}/edit', [SubmissionController::class, 'edit'])->name('submissions.edit');
+    Route::patch('/submissions/{submission}', [SubmissionController::class, 'update'])->name('submissions.update');
+    Route::post('/submissions/{submission}/submit', [SubmissionController::class, 'submit'])->name('submissions.submit');
 
     // Issues (Decision Issues)
     Route::get('/issues', [IssueController::class, 'index'])->name('issues.index');

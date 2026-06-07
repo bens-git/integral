@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cds;
 
 use App\Http\Controllers\Controller;
-use App\Models\Cds\Proposal;
+use App\Models\Cds\Submission;
 use App\Models\Cds\DecisionIssue;
 use App\Models\Cds\DecisionDispatch;
 use App\Models\Cds\DeliberationMessage;
@@ -16,29 +16,29 @@ class DashboardController extends Controller
     {
         // Stats
         $stats = [
-            'active_proposals' => Proposal::count(),
+            'active_submissions' => Submission::count(),
             'issues_in_deliberation' => DecisionIssue::where('status', 'deliberation')->count(),
             'consensus_reached' => DecisionIssue::whereNotNull('consensus_reached_at')->count(),
             'pending_decisions' => DecisionDispatch::where('status', 'pending')->count(),
         ];
 
         // Proposals by status (for status breakdown)
-        $proposalsByStatus = Proposal::selectRaw('status, count(*) as cnt')
+        $proposalsByStatus = Submission::selectRaw('status, count(*) as cnt')
             ->groupBy('status')
             ->get()
             ->mapWithKeys(function ($r) { return [ $r->status => $r->cnt ]; });
 
         // attach to stats
-        $stats['proposals_by_status'] = $proposalsByStatus;
+        $stats['submissions_by_status'] = $proposalsByStatus;
 
         // Recent proposals
-        $recentProposals = Proposal::orderByDesc('created_at')
+        $recentProposals = Submission::orderByDesc('created_at')
             ->limit(6)
-            ->get(['id','title','created_at'])
+            ->get(['id','title','created_at','submission_type'])
             ->map(function ($p) {
                 return [
                     'id' => $p->id,
-                    'type' => 'proposal',
+                    'type' => $p->submission_type ?? 'submission',
                     'title' => $p->title,
                     'action' => 'submitted',
                     'created_at' => $p->created_at,

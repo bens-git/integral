@@ -127,7 +127,7 @@ const statusColors = {
                             <div>
                                 <h3 class="text-lg font-semibold text-gray-900 mb-3">Related Proposal</h3>
                                 <div v-if="issue.proposal" class="bg-gray-50 rounded-lg p-4">
-                                    <Link :href="route('cds.proposals.show', issue.proposal.id)"
+                                    <Link :href="route('cds.submissions.show', issue.proposal.id)"
                                         class="text-blue-600 hover:text-blue-800 font-medium">
                                         {{ issue.proposal.title }}
                                     </Link>

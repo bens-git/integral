@@ -45,7 +45,7 @@ class SystemSignal extends Model
 
     public function proposal(): BelongsTo
     {
-        return $this->belongsTo(Proposal::class, 'proposal_id');
+        return $this->belongsTo(Submission::class, 'proposal_id');
     }
 
     public function issue(): BelongsTo

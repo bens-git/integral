@@ -64,7 +64,7 @@ function submit() {
   showClientErrors.value = true;
   if (!isValid.value) return;
 
-  form.post(route('cds.proposals.store'), {
+  form.post(route('cds.submissions.store'), {
     onSuccess: () => {
       dialog.value = false;
       form.reset('title','description','category','priority','scope');

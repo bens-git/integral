@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-use App\Models\Cds\Submission;
-
-class Proposal extends Submission
+class Submission extends Model
 {
     use HasFactory;
 
@@ -32,6 +30,7 @@ class Proposal extends Submission
         'is_amendment',
         'amends_id',
         'embedding',
+        'submission_type',
     ];
 
     protected $casts = [
