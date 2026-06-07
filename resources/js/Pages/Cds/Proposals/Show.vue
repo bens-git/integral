@@ -21,9 +21,7 @@
         </div>
 
         <v-divider class="my-4" />
-        <Link :href="route('cds.proposals.index')">
-          <v-btn text>Back to proposals</v-btn>
-        </Link>
+        <v-btn text @click="goBack">Back to proposals</v-btn>
       </v-card>
     </v-container>
   </AuthenticatedLayout>
@@ -31,9 +29,21 @@
 
 <script setup>
 import { computed } from 'vue'
-import { Head, usePage, Link } from '@inertiajs/vue3'
+import { Head, usePage, router } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 const page = usePage()
 const proposal = computed(() => page.props.proposal ?? null)
+
+function goBack() {
+  let href = route('cds.proposals.index');
+  try {
+    const url = new URL(href);
+    href = url.pathname + url.search + url.hash;
+  } catch (e) {
+    // leave href as-is if URL parsing fails
+  }
+  router.visit(href);
+}
+
 </script>

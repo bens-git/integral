@@ -29,6 +29,11 @@ class Proposal extends Model
         'supersedes_id',
         'is_amendment',
         'amends_id',
+        'embedding',
+    ];
+
+    protected $casts = [
+        'embedding' => 'array',
     ];
 
     protected static function boot()

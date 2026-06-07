@@ -94,9 +94,7 @@ function refresh() {
             <tbody>
               <tr v-for="proposal in proposals.data" :key="proposal.id">
                 <td>
-                  <Link :href="route('cds.proposals.show', proposal.id)">
                     {{ proposal.title }}
-                  </Link>
                 </td>
 
                 <td>{{ proposal.category }}</td>
@@ -121,14 +119,7 @@ function refresh() {
                     </template>
                   </ProposalDialog>
 
-                  <Link
-                    v-if="proposal.status === 'draft'"
-                    :href="route('cds.proposals.submit', proposal.id)"
-                  >
-                    <v-btn size="small" color="success" variant="text">
-                      Submit
-                    </v-btn>
-                  </Link>
+                  
                 </td>
               </tr>
 
