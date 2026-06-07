@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Services\EmbeddingService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ProposalController extends Controller
 {
@@ -54,53 +55,79 @@ class ProposalController extends Controller
         // create a combined text representation for embedding
         $text = trim($validated['title'] . "\n\n" . $validated['description']);
 
+        DB::beginTransaction();
         try {
+            // generate embedding
             $embedding = EmbeddingService::getEmbedding($text);
-            if (empty($embedding) || !is_array($embedding)) {
-                Log::error('Embedding service returned no embedding or invalid shape');
+            if (empty($embedding) || !is_array($embedding) || count($embedding) === 0) {
+                Log::error('Embedding service returned no embedding or invalid shape', ['text' => substr($text, 0, 200)]);
+                DB::rollBack();
                 return redirect()->back()
                     ->withInput()
                     ->withErrors(['title' => 'Unable to check for duplicate proposals at this time. Please try again later.']);
             }
-        } catch (\Exception $e) {
-            Log::error('Embedding error: ' . $e->getMessage());
-            return redirect()->back()
-                ->withInput()
-                ->withErrors(['title' => 'Unable to check for duplicate proposals at this time. Please try again later.']);
-        }
 
-        // check for near-duplicates using the embedding
-        $threshold = (float) env('PROPOSAL_DUPLICATE_SIMILARITY', 0.9);
-        $candidates = Proposal::whereNotNull('embedding')->get();
-        foreach ($candidates as $candidate) {
-            $other = $candidate->embedding;
-            if (is_array($other) && count($other) === count($embedding)) {
-                $sim = EmbeddingService::cosineSimilarity($embedding, $other);
-                if ($sim >= $threshold) {
+            // basic validation of embedding contents
+            foreach ($embedding as $val) {
+                if (!is_numeric($val)) {
+                    Log::error('Embedding contains non-numeric values', ['sample' => array_slice($embedding, 0, 3)]);
+                    DB::rollBack();
                     return redirect()->back()
                         ->withInput()
-                        ->withErrors(['title' => "A similar proposal already exists (similarity: " . round($sim, 3) . "): {$candidate->title}"]);
+                        ->withErrors(['title' => 'Unable to check for duplicate proposals at this time. Please try again later.']);
                 }
             }
+
+            // check for near-duplicates using the embedding
+            $threshold = (float) env('PROPOSAL_DUPLICATE_SIMILARITY', 0.9);
+            $candidates = Proposal::whereNotNull('embedding')->get();
+            foreach ($candidates as $candidate) {
+                $other = $candidate->embedding;
+                if (is_array($other) && count($other) === count($embedding)) {
+                    try {
+                        $sim = EmbeddingService::cosineSimilarity($embedding, $other);
+                    } catch (\Exception $e) {
+                        Log::error('Error computing similarity', ['error' => $e->getMessage()]);
+                        DB::rollBack();
+                        return redirect()->back()
+                            ->withInput()
+                            ->withErrors(['title' => 'Unable to check for duplicate proposals at this time. Please try again later.']);
+                    }
+
+                    if ($sim >= $threshold) {
+                        DB::rollBack();
+                        return redirect()->back()
+                            ->withInput()
+                            ->withErrors(['title' => "A similar proposal already exists (similarity: " . round($sim, 3) . "): {$candidate->title}"]);
+                    }
+                }
+            }
+
+            // Get or create participant for the authenticated user
+            $participant = Participant::firstOrCreate(
+                ['user_id' => Auth::id()],
+                ['name' => Auth::user()->name, 'email' => Auth::user()->email]
+            );
+
+            $proposalData = array_merge($validated, [
+                'submitter_id' => $participant->id,
+                'status' => 'draft',
+                'embedding' => $embedding,
+            ]);
+
+            $proposal = Proposal::create($proposalData);
+
+            DB::commit();
+
+            return redirect()->route('cds.proposals.show', $proposal)
+                ->with('success', 'Proposal created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Proposal create error: ' . $e->getMessage(), ['exception' => $e]);
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['title' => 'Unable to create proposal at this time. Please try again later.']);
         }
-
-        // Get or create participant for the authenticated user
-        $participant = Participant::firstOrCreate(
-            ['user_id' => Auth::id()],
-            ['name' => Auth::user()->name, 'email' => Auth::user()->email]
-        );
-
-        $proposalData = array_merge($validated, [
-            'submitter_id' => $participant->id,
-            'status' => 'draft',
-        ]);
-
-        $proposalData['embedding'] = $embedding;
-
-        $proposal = Proposal::create($proposalData);
-
-        return redirect()->route('cds.proposals.show', $proposal)
-            ->with('success', 'Proposal created successfully.');
     }
 
     public function show(Proposal $proposal)

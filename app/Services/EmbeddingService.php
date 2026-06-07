@@ -33,43 +33,56 @@ class EmbeddingService
         }
 
         if ($provider === 'google') {
+            // Read the key and strip spaces, single quotes, and double quotes
             $apiKey = env('GOOGLE_API_KEY');
+            $apiKey = trim($apiKey);
+            $apiKey = trim($apiKey, '"\'');
+
             if (empty($apiKey)) {
-                throw new \Exception('GOOGLE_API_KEY not configured');
+                throw new \Exception('GOOGLE_API_KEY not configured or empty');
             }
 
-            $model = env('GOOGLE_EMBEDDING_MODEL', 'textembedding-gecko-001');
-            $defaultEndpoint = "https://generativelanguage.googleapis.com/v1beta2/models/{$model}:embedText";
-            $endpoint = env('GOOGLE_EMBEDDING_URL', $defaultEndpoint);
+            $model = env('GOOGLE_EMBEDDING_MODEL', 'models/gemini-embedding-2');
+            $model = trim($model);
+            $model = trim($model, '"\'');
+            $model = ltrim($model, '/');
+            
+            // Explicit, raw endpoint structure
+            $url = "https://generativelanguage.googleapis.com/v1beta/{$model}:embedContent?key={$apiKey}";
 
-            // Google accepts API key as query param for simple API key use-cases.
-            $url = $endpoint . (strpos($endpoint, '?') === false ? "?key={$apiKey}" : "&key={$apiKey}");
-
-            $resp = Http::post($url, [
-                'text' => $text,
+            $payload = json_encode([
+                'content' => [
+                    'parts' => [
+                        ['text' => $text]
+                    ]
+                ]
             ]);
 
-            if (!$resp->successful()) {
-                throw new \Exception('Google embedding API error: ' . $resp->body());
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($httpCode !== 200) {
+                throw new \Exception('Google embedding API error (Status ' . $httpCode . '): ' . $response);
             }
 
-            $data = $resp->json();
+            $data = json_decode($response, true);
 
-            // Try a few common response shapes
-            if (!empty($data['embeddings'][0]['embedding'])) {
-                return $data['embeddings'][0]['embedding'];
-            }
-            if (!empty($data['data'][0]['embedding'])) {
-                return $data['data'][0]['embedding'];
-            }
-            if (!empty($data['embedding'])) {
-                return $data['embedding'];
+            if (!empty($data['embedding']['values'])) {
+                return $data['embedding']['values'];
             }
 
-            // If unknown shape, log and return null
             Log::warning('Unknown Google embedding response shape', ['response' => $data]);
             return null;
         }
+
+
 
         // Default: OpenAI-compatible embeddings API
         $apiKey = env('OPENAI_API_KEY');
