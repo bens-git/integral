@@ -16,20 +16,79 @@ class SubmissionController extends Controller
 {
     public function index(Request $request)
     {
-        $proposals = Submission::with(['submitter'])
-            ->when($request->has('status'), function ($query) use ($request) {
-                $query->where('status', $request->status);
-            })
-            ->when($request->has('category'), function ($query) use ($request) {
-                $query->where('category', $request->category);
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
+        $allowedSorts = [
+            'title',
+            'category',
+            'status',
+            'priority',
+            'created_at',
+        ];
 
-        return Inertia::render('Cds/Submissions/Index', [
-            'submissions' => $proposals,
-            'filters' => $request->only(['status', 'category']),
-        ]);
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortDirection = $request->get('sort_direction', 'desc');
+
+        if (! in_array($sortBy, $allowedSorts)) {
+            $sortBy = 'created_at';
+        }
+
+        if (! in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
+        $submissions = Submission::query()
+            ->with('submitter')
+
+            ->when(
+                $request->filled('search'),
+                function ($query) use ($request) {
+                    $search = trim($request->search);
+
+                    $query->where(function ($q) use ($search) {
+                        $q->where('title', 'like', "%{$search}%")
+                            ->orWhere('description', 'like', "%{$search}%");
+                    });
+                }
+            )
+
+            ->when(
+                $request->filled('status'),
+                fn($query) => $query->where(
+                    'status',
+                    $request->status
+                )
+            )
+
+            ->when(
+                $request->filled('category'),
+                fn($query) => $query->where(
+                    'category',
+                    $request->category
+                )
+            )
+
+            ->orderBy($sortBy, $sortDirection)
+
+            ->paginate(
+                $request->integer('per_page', 20)
+            )
+
+            ->withQueryString();
+
+        return Inertia::render(
+            'Cds/Submissions/Index',
+            [
+                'submissions' => $submissions,
+
+                'filters' => [
+                    'search' => $request->search,
+                    'status' => $request->status,
+                    'category' => $request->category,
+                    'sort_by' => $sortBy,
+                    'sort_direction' => $sortDirection,
+                    'per_page' => $request->integer('per_page', 20),
+                ],
+            ]
+        );
     }
 
     public function create()

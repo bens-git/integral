@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Jobs\ClusterSubmission;
+use Illuminate\Support\Facades\Log;
 
 class Submission extends Model
 {
@@ -45,6 +48,25 @@ class Submission extends Model
                 $model->id = (string) \Illuminate\Support\Str::uuid();
             }
         });
+
+        // After a submission is created, dispatch clustering job to group similar submissions.
+        static::created(function ($model) {
+            try {
+                ClusterSubmission::dispatch($model->id);
+            } catch (\Throwable $e) {
+                Log::error('Cluster dispatch failed: ' . $e->getMessage(), ['submission_id' => $model->id]);
+            }
+        });
+    }
+
+    /**
+     * Submissions can belong to many clusters.
+     */
+    public function clusters(): BelongsToMany
+    {
+        return $this->belongsToMany(SubmissionCluster::class, 'submission_cluster_members', 'submission_id', 'cluster_id')
+            ->withPivot('similarity')
+            ->withTimestamps();
     }
 
     public function submitter(): BelongsTo

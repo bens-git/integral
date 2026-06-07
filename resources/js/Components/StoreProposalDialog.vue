@@ -2,12 +2,12 @@
   <div>
     <v-dialog v-model="dialog" persistent max-width="720">
       <template #activator="{ props: activatorProps }">
-        <v-btn color="primary" v-bind="activatorProps">New Proposal</v-btn>
+        <v-btn color="primary" v-bind="activatorProps">New Submission</v-btn>
       </template>
 
       <v-card>
         <v-card-title>
-          Create Proposal
+          Create Submission
         </v-card-title>
 
         <v-card-text>
