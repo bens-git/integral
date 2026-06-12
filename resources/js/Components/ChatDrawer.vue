@@ -128,9 +128,10 @@ const isPermanent = computed(() => mdAndUp.value);
 
 const userId = computed(() => page.props.auth?.user?.id);
 
-let messagesTimer = null;
-let onlineTimer = null;
+let chatChannel = null;
+let onlineChannel = null;
 let pingTimer = null;
+let onlineTimer = null;
 
 // sync open state
 watch(
@@ -142,14 +143,14 @@ watch(
 watch(localOpen, (v) => {
     emit("update:modelValue", v);
     if (v || isPermanent.value) {
-        startPolling();
+        startEcho();
         markRead();
-    } else stopPolling();
+    } else stopEcho();
 });
 
 watch(isPermanent, (v) => {
     if (v) {
-        startPolling();
+        startEcho();
         markRead();
     }
 });
@@ -189,6 +190,13 @@ async function fetchOnline() {
     } catch {}
 }
 
+function addOnlineUser(e) {
+    const exists = online.value.some(u => u.id === e.id);
+    if (!exists) {
+        online.value.push(e);
+    }
+}
+
 function updateUnread() {
     const lastId = messages.value.length
         ? messages.value[messages.value.length - 1].id
@@ -225,7 +233,6 @@ async function send() {
         });
 
         body.value = "";
-        await fetchMessages();
     } finally {
         sending.value = false;
     }
@@ -237,34 +244,48 @@ function scrollBottom() {
     el.scrollTop = el.scrollHeight;
 }
 
-function startPolling() {
-    if (messagesTimer) return;
+function startEcho() {
+    if (chatChannel) return;
 
     fetchMessages();
     fetchOnline();
 
-    messagesTimer = setInterval(fetchMessages, 2000);
+    chatChannel = window.Echo.private('chat')
+        .listen('ChatMessageCreated', (e) => {
+            messages.value.push(e);
+            updateUnread();
+            nextTick().then(scrollBottom);
+        });
+
+    onlineChannel = window.Echo.private('online')
+        .listen('UserOnline', addOnlineUser);
+
     onlineTimer = setInterval(fetchOnline, 5000);
     pingTimer = setInterval(() => {
         axios.post(route("chat.ping")).catch(() => {});
     }, 10000);
 }
 
-function stopPolling() {
-    clearInterval(messagesTimer);
+function stopEcho() {
+    if (chatChannel) {
+        window.Echo.leave('chat');
+        chatChannel = null;
+    }
+    if (onlineChannel) {
+        window.Echo.leave('online');
+        onlineChannel = null;
+    }
     clearInterval(onlineTimer);
-    clearInterval(pingTimer);
-
-    messagesTimer = null;
     onlineTimer = null;
+    clearInterval(pingTimer);
     pingTimer = null;
 }
 
 onMounted(() => {
-    if (localOpen.value || isPermanent.value) startPolling();
+    if (localOpen.value || isPermanent.value) startEcho();
 });
 
-onUnmounted(() => stopPolling());
+onUnmounted(() => stopEcho());
 </script>
 
 <style scoped>

@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
@@ -12,6 +13,12 @@
 
         <!-- Favicon -->
         <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+
+        <!-- Broadcast config -->
+        <meta name="broadcast-key" content="{{ config('broadcasting.connections.reverb.key') }}">
+        <meta name="broadcast-host" content="{{ config('broadcasting.connections.reverb.options.host') }}">
+        <meta name="broadcast-port" content="{{ config('broadcasting.connections.reverb.options.port') }}">
+        <meta name="broadcast-scheme" content="{{ config('broadcasting.connections.reverb.options.scheme') }}">
 
         <!-- Scripts -->
         @routes

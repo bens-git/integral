@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ChatMessageCreated;
 use App\Models\ChatMessage;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,6 +36,7 @@ class ChatController extends Controller
         ]);
 
         $msg->load('user');
+        broadcast(new ChatMessageCreated($msg));
 
         return response()->json([
             'id' => $msg->id,
@@ -60,6 +62,7 @@ class ChatController extends Controller
         if ($user) {
             $user->last_seen_at = now();
             $user->save();
+            broadcast(new UserOnline($user));
         }
 
         return response()->noContent();

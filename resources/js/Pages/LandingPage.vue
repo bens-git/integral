@@ -10,7 +10,7 @@
       </v-col>
     </v-row>
 
-    <v-row class="system-cards" dense>
+    <v-row class="system-cards" density="comfortable">
       <v-col cols="12" sm="6" md="4" lg="2" v-for="sys in systems" :key="sys.id">
         <v-card class="pa-4 sys-card" hover>
           <div class="sys-card-id">{{ sys.id }}</div>
@@ -38,7 +38,7 @@ const systems = reactive([
   { id: 'CDS', name: 'COLLABORATIVE DECISION SYSTEM', role: 'Democratic governance. Issues are raised, deliberated, decided by weighted consensus, and dispatched — with a complete tamper-evident record.', modules: '10 modules', internal: true, route: route('cds.dashboard') },
   { id: 'OAD', name: 'OPEN ACCESS DESIGN', role: 'Shared design commons. Production blueprints are authored collaboratively, ecologically assessed, certified, and freely available to all nodes.', modules: '10 modules', internal: false, url: 'https://integralcollective.io/system/#oad' },
   { id: 'ITC', name: 'INTEGRAL TIME CREDITS', role: 'Contribution accounting without money. Non-transferable, time-decaying credits that reflect real labor, materials, and ecological cost — not market value.', modules: '9 modules', internal: false, url: 'https://integralcollective.io/system/#itc' },
-  { id: 'COS', name: 'COOPERATIVE ORGANIZATION', role: 'The engine room. Production plans are executed, labor coordinated, materials managed, quality assured — all generating the data the other systems need.', modules: '9 modules', internal: false, url: 'https://integralcollective.io/system/#cos' },
+  { id: 'COS', name: 'COOPERATIVE ORGANATION', role: 'The engine room. Production plans are executed, labor coordinated, materials managed, quality assured — all generating the data the other systems need.', modules: '9 modules', internal: false, url: 'https://integralcollective.io/system/#cos' },
   { id: 'FRS', name: 'FEEDBACK & REVIEW SYSTEM', role: 'The cybernetic nervous system. Reads operational reality, diagnoses drift from principles, generates recommendations, and routes them back to CDS — closing the loop.', modules: '7 modules', internal: false, url: 'https://integralcollective.io/system/#frs' },
 ]);
 </script>
