@@ -118,46 +118,40 @@ class SubmissionController extends Controller
         try {
             // generate embedding
             $embedding = EmbeddingService::getEmbedding($text);
-            if (empty($embedding) || !is_array($embedding) || count($embedding) === 0) {
-                Log::error('Embedding service returned no embedding or invalid shape', ['text' => substr($text, 0, 200)]);
-                DB::rollBack();
-                return redirect()->back()
-                    ->withInput()
-                    ->withErrors(['title' => 'Unable to check for duplicate proposals at this time. Please try again later.']);
-            }
-
-            // basic validation of embedding contents
-            foreach ($embedding as $val) {
-                if (!is_numeric($val)) {
-                    Log::error('Embedding contains non-numeric values', ['sample' => array_slice($embedding, 0, 3)]);
-                    DB::rollBack();
-                    return redirect()->back()
-                        ->withInput()
-                        ->withErrors(['title' => 'Unable to check for duplicate proposals at this time. Please try again later.']);
-                }
-            }
-
-            // check for near-duplicates using the embedding
-            $threshold = (float) env('PROPOSAL_DUPLICATE_SIMILARITY', 0.9);
-            $candidates = Submission::whereNotNull('embedding')->get();
-            foreach ($candidates as $candidate) {
-                $other = $candidate->embedding;
-                if (is_array($other) && count($other) === count($embedding)) {
-                    try {
-                        $sim = EmbeddingService::cosineSimilarity($embedding, $other);
-                    } catch (\Exception $e) {
-                        Log::error('Error computing similarity', ['error' => $e->getMessage()]);
+            if (!is_null($embedding)) {
+                // basic validation of embedding contents
+                foreach ($embedding as $val) {
+                    if (!is_numeric($val)) {
+                        Log::error('Embedding contains non-numeric values', ['sample' => array_slice($embedding, 0, 3)]);
                         DB::rollBack();
                         return redirect()->back()
                             ->withInput()
                             ->withErrors(['title' => 'Unable to check for duplicate proposals at this time. Please try again later.']);
                     }
+                }
 
-                    if ($sim >= $threshold) {
-                        DB::rollBack();
-                        return redirect()->back()
-                            ->withInput()
-                            ->withErrors(['title' => "A similar submission already exists (similarity: " . round($sim, 3) . "): {$candidate->title}"]);
+                // check for near-duplicates using the embedding
+                $threshold = (float) env('PROPOSAL_DUPLICATE_SIMILARITY', 0.9);
+                $candidates = Submission::whereNotNull('embedding')->get();
+                foreach ($candidates as $candidate) {
+                    $other = $candidate->embedding;
+                    if (is_array($other) && count($other) === count($embedding)) {
+                        try {
+                            $sim = EmbeddingService::cosineSimilarity($embedding, $other);
+                        } catch (\Exception $e) {
+                            Log::error('Error computing similarity', ['error' => $e->getMessage()]);
+                            DB::rollBack();
+                            return redirect()->back()
+                                ->withInput()
+                                ->withErrors(['title' => 'Unable to check for duplicate proposals at this time. Please try again later.']);
+                        }
+
+                        if ($sim >= $threshold) {
+                            DB::rollBack();
+                            return redirect()->back()
+                                ->withInput()
+                                ->withErrors(['title' => "A similar submission already exists (similarity: " . round($sim, 3) . "): {$candidate->title}"]);
+                        }
                     }
                 }
             }

@@ -25,7 +25,7 @@ if (hasBroadcastConfig) {
         wsHost: host,
         wsPort: port,
         wssPort: port,
-        forceTLS: false,
+        forceTLS: scheme === 'https',
         disableStats: true,
         enabledTransports: ['ws', 'wss'],
     });

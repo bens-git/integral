@@ -39,7 +39,8 @@ class EmbeddingService
             $apiKey = trim($apiKey, '"\'');
 
             if (empty($apiKey)) {
-                throw new \Exception('GOOGLE_API_KEY not configured or empty');
+                Log::warning('GOOGLE_API_KEY not configured, returning null embedding');
+                return null;
             }
 
             $model = env('GOOGLE_EMBEDDING_MODEL', 'models/gemini-embedding-2');
@@ -87,7 +88,8 @@ class EmbeddingService
         // Default: OpenAI-compatible embeddings API
         $apiKey = env('OPENAI_API_KEY');
         if (empty($apiKey)) {
-            throw new \Exception('OPENAI_API_KEY not configured');
+            Log::warning('OPENAI_API_KEY not configured, returning null embedding');
+            return null;
         }
 
         $model = env('OPENAI_EMBEDDING_MODEL', 'text-embedding-3-small');

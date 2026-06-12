@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Events\ChatMessageCreated;
+use App\Events\UserOnline;
 use App\Models\ChatMessage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ChatController extends Controller
 {
@@ -36,7 +38,11 @@ class ChatController extends Controller
         ]);
 
         $msg->load('user');
-        broadcast(new ChatMessageCreated($msg));
+        try {
+            broadcast(new ChatMessageCreated($msg));
+        } catch (\Throwable $e) {
+            Log::warning('broadcast failed: ' . $e->getMessage());
+        }
 
         return response()->json([
             'id' => $msg->id,
@@ -62,7 +68,11 @@ class ChatController extends Controller
         if ($user) {
             $user->last_seen_at = now();
             $user->save();
-            broadcast(new UserOnline($user));
+            try {
+                broadcast(new UserOnline($user));
+            } catch (\Throwable $e) {
+                Log::warning('broadcast failed: ' . $e->getMessage());
+            }
         }
 
         return response()->noContent();
