@@ -2,7 +2,7 @@
   <v-container class="py-12">
     <v-row class="justify-center mb-8">
       <v-col cols="12" md="8" class="text-center">
-        <ApplicationLogo width="72" height="72" class="mb-4" />
+        <ApplicationLogo width="72" height="72" class="mb-4 mx-auto d-block" />
         <Head title="The Five Systems — INTEGRAL" />
         <h1 class="text-h4 mb-2">The Five Systems</h1>
         <p class="text-subtitle-1 mb-4">Integral coordinates production and governance through five interdependent systems: CDS, OAD, ITC, COS, and FRS — a cybernetic feedback loop without markets or central authority.</p>
