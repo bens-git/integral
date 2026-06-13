@@ -75,7 +75,7 @@ const recent = computed(() => page.props.recentProposals || []);
 
                 <v-col cols="12" md="4">
                     <v-card class="pa-4 mb-4">
-                        <h3 class="text-h6">Proposals by status</h3>
+                        <h3 class="text-h6">Submissions by status</h3>
                         <v-list dense>
                             <v-list-item v-for="(count, status) in stats.submissions_by_status || {}" :key="status">
                                 <v-list-item-content>

@@ -17,7 +17,7 @@ class DashboardController extends Controller
         $usersCount = User::count();
         $proposalsCount = Submission::count();
 
-        // Proposals by status
+        // Submissions by status
         $proposalsByStatus = Submission::selectRaw('status, count(*) as cnt')
             ->groupBy('status')
             ->get()

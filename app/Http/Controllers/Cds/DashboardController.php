@@ -22,7 +22,7 @@ class DashboardController extends Controller
             'pending_decisions' => DecisionDispatch::where('status', 'pending')->count(),
         ];
 
-        // Proposals by status (for status breakdown)
+        // Submissions by status (for status breakdown)
         $proposalsByStatus = Submission::selectRaw('status, count(*) as cnt')
             ->groupBy('status')
             ->get()

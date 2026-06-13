@@ -168,18 +168,18 @@ class SubmissionController extends Controller
                 'embedding' => $embedding,
             ]);
 
-            $proposal = Submission::create($proposalData);
+            $submission = Submission::create($proposalData);
 
             DB::commit();
 
-            return redirect()->route('cds.submissions.show', $proposal)
+            return redirect()->route('cds.submissions.show', $submission)
                 ->with('success', 'Submission created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Proposal create error: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Submission create error: ' . $e->getMessage(), ['exception' => $e]);
             return redirect()->back()
                 ->withInput()
-                ->withErrors(['title' => 'Unable to create proposal at this time. Please try again later.']);
+                ->withErrors(['title' => 'Unable to create submission at this time. Please try again later.']);
         }
     }
 

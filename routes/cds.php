@@ -22,7 +22,7 @@ Route::middleware(['auth', 'verified'])->prefix('cds')->name('cds.')->group(func
     // Dashboard
     Route::get('/', [App\Http\Controllers\Cds\DashboardController::class, 'index'])->name('dashboard');
 
-    // Proposals
+    // Submissions
     Route::get('/submissions', [SubmissionController::class, 'index'])->name('submissions.index');
     Route::get('/submissions/create', [SubmissionController::class, 'create'])->name('submissions.create');
     Route::post('/submissions', [SubmissionController::class, 'store'])->name('submissions.store');

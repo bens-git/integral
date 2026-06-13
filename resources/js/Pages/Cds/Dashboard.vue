@@ -23,7 +23,7 @@ const statCards = computed(() => {
     return [
         {
             key: "active_proposals",
-            label: "Active Proposals",
+            label: "Active Submissions",
             value: s.active_proposals ?? 0,
             href: route("cds.submissions.index") + "?status=active",
         },
@@ -82,7 +82,7 @@ const statCards = computed(() => {
                     </div>
 
                     <div class="d-flex ga-2 mt-4 mt-md-0">
-                        <v-btn variant="text" class="me-2" @click.prevent="goProposals">View Proposals</v-btn>
+                        <v-btn variant="text" class="me-2" @click.prevent="goProposals">View Submissions</v-btn>
                         <StoreProposalDialog @proposal-created="refresh" />
                     </div>
                 </div>
@@ -95,7 +95,7 @@ const statCards = computed(() => {
                         <div class="d-flex justify-space-between">
                             <div>
                                 <div class="text-caption text-medium-emphasis">
-                                    Active Proposals
+                                    Active Submissions
                                 </div>
 
                                 <div class="text-h4 font-weight-bold">
