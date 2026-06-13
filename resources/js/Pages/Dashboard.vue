@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import StoreSubmissionDialog from '@/Components/StoreSubmissionDialog.vue';
 
 const page = usePage();
 const user = computed(() => page.props.user || page.props.auth?.user || null);
@@ -78,22 +79,20 @@ const recent = computed(() => page.props.recentProposals || []);
                         <h3 class="text-h6">Submissions by status</h3>
                         <v-list dense>
                             <v-list-item v-for="(count, status) in stats.submissions_by_status || {}" :key="status">
-                                <v-list-item-content>
-                                    <div class="d-flex justify-space-between">
-                                        <div>{{ status }}</div>
-                                        <div class="font-medium">{{ count }}</div>
-                                    </div>
-                                </v-list-item-content>
+                                <div class="d-flex justify-space-between">
+                                    <div>{{ status }}</div>
+                                    <div class="font-medium">{{ count }}</div>
+                                </div>
                             </v-list-item>
                             <v-list-item v-if="!stats.proposals_by_status || Object.keys(stats.proposals_by_status).length === 0">
-                                <v-list-item-content>No data</v-list-item-content>
+                                No data
                             </v-list-item>
                         </v-list>
                     </v-card>
 
                     <v-card class="pa-4">
                         <h3 class="text-h6">Quick actions</h3>
-                        <v-btn block color="primary" class="mb-2" :href="route('cds.submissions.create')">New Submission</v-btn>
+                        <StoreSubmissionDialog @submission-created="refresh" />
                         <v-btn block outlined :href="route('cds.issues.create')">New Issue</v-btn>
                     </v-card>
                 </v-col>

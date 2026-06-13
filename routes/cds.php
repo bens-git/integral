@@ -4,6 +4,7 @@ use App\Http\Controllers\Cds\SubmissionController;
 use App\Http\Controllers\Cds\IssueController;
 use App\Http\Controllers\Cds\DeliberationController;
 use App\Http\Controllers\Cds\ConsensusController;
+use App\Http\Controllers\Cds\ClusterController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -68,4 +69,8 @@ Route::middleware(['auth', 'verified'])->prefix('cds')->name('cds.')->group(func
     Route::get('/decisions/{ledger}', function () {
         return Inertia::render('Cds/Decisions/Show');
     })->name('decisions.show');
+
+    // Clusters
+    Route::get('/clusters', [App\Http\Controllers\Cds\ClusterController::class, 'index'])->name('clusters.index');
+    Route::get('/clusters/{cluster}', [App\Http\Controllers\Cds\ClusterController::class, 'show'])->name('clusters.show');
 });

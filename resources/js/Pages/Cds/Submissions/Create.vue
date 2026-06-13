@@ -20,100 +20,190 @@ const form = useForm({
 function submit() {
     form.post(route('cds.submissions.store'));
 }
+
+const formatLabel = (value) => {
+    if (!value) return '';
+    return value
+        .replace('_', ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+};
 </script>
+
 
 <template>
     <Head title="New Proposal" />
 
     <AuthenticatedLayout>
+
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Create New Proposal
-            </h2>
+            <div class="d-flex align-center">
+                <h2 class="text-h5">
+                    Create New Proposal
+                </h2>
+            </div>
         </template>
 
-        <div class="py-12">
-            <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <form @submit.prevent="submit">
-                            <!-- Title -->
-                            <div class="mb-6">
-                                <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-                                <input id="title" v-model="form.title" type="text" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    :class="{ 'border-red-300': form.errors.title }" />
-                                <p v-if="form.errors.title" class="mt-1 text-sm text-red-600">{{ form.errors.title }}</p>
-                            </div>
 
-                            <!-- Description -->
-                            <div class="mb-6">
-                                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                                <textarea id="description" v-model="form.description" rows="3" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    :class="{ 'border-red-300': form.errors.description }"></textarea>
-                                <p v-if="form.errors.description" class="mt-1 text-sm text-red-600">{{ form.errors.description }}</p>
-                            </div>
+        <v-container class="py-8">
 
-                            <!-- Content -->
-                            <div class="mb-6">
-                                <label for="content" class="block text-sm font-medium text-gray-700">Full Content (Optional)</label>
-                                <textarea id="content" v-model="form.content" rows="6"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
-                                <p class="mt-1 text-sm text-gray-500">Provide detailed information about your proposal</p>
-                            </div>
+            <v-row justify="center">
 
-                            <!-- Category -->
-                            <div class="mb-6">
-                                <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-                                <select id="category" v-model="form.category" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    :class="{ 'border-red-300': form.errors.category }">
-                                    <option v-for="category in categories" :key="category" :value="category">
-                                        {{ category.charAt(0).toUpperCase() + category.slice(1).replace('_', ' ') }}
-                                    </option>
-                                </select>
-                            </div>
+                <v-col cols="12" md="9" lg="8">
 
-                            <!-- Priority -->
-                            <div class="mb-6">
-                                <label for="priority" class="block text-sm font-medium text-gray-700">Priority</label>
-                                <select id="priority" v-model="form.priority" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    :class="{ 'border-red-300': form.errors.priority }">
-                                    <option v-for="priority in priorities" :key="priority" :value="priority">
-                                        {{ priority.charAt(0).toUpperCase() + priority.slice(1) }}
-                                    </option>
-                                </select>
-                            </div>
+                    <v-card elevation="2">
 
-                            <!-- Scope -->
-                            <div class="mb-6">
-                                <label for="scope" class="block text-sm font-medium text-gray-700">Scope (Optional)</label>
-                                <select id="scope" v-model="form.scope"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                    <option :value="null">Select scope...</option>
-                                    <option v-for="scope in scopes" :key="scope" :value="scope">
-                                        {{ scope.charAt(0).toUpperCase() + scope.slice(1) }}
-                                    </option>
-                                </select>
-                            </div>
+                        <v-card-title class="pa-6">
+                            Proposal Details
+                        </v-card-title>
 
-                            <!-- Actions -->
-                            <div class="flex items-center justify-end gap-4">
-                                <Link :href="route('cds.submissions.index')"
-                                    class="inline-flex items-center px-4 py-2 bg-gray-300 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-400 focus:bg-gray-400 active:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                    Cancel
-                                </Link>
-                                <button type="submit" :disabled="form.processing"
-                                    class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 disabled:opacity-25">
-                                    {{ form.processing ? 'Creating...' : 'Create Proposal' }}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+                        <v-divider />
+
+
+                        <v-card-text class="pa-6">
+
+                            <v-form @submit.prevent="submit">
+
+
+                                <!-- Title -->
+                                <v-text-field
+                                    v-model="form.title"
+                                    label="Title"
+                                    variant="outlined"
+                                    required
+                                    :error-messages="form.errors.title"
+                                    class="mb-4"
+                                />
+
+
+                                <!-- Description -->
+                                <v-textarea
+                                    v-model="form.description"
+                                    label="Description"
+                                    variant="outlined"
+                                    rows="4"
+                                    required
+                                    :error-messages="form.errors.description"
+                                    class="mb-4"
+                                />
+
+
+                                <!-- Content -->
+                                <v-textarea
+                                    v-model="form.content"
+                                    label="Full Content"
+                                    hint="Provide detailed information about your proposal"
+                                    persistent-hint
+                                    variant="outlined"
+                                    rows="8"
+                                    class="mb-6"
+                                />
+
+
+
+                                <v-row>
+
+
+                                    <!-- Category -->
+                                    <v-col cols="12" md="4">
+
+                                        <v-select
+                                            v-model="form.category"
+                                            label="Category"
+                                            variant="outlined"
+                                            :items="categories"
+                                            :item-title="formatLabel"
+                                            item-value="this"
+                                            :error-messages="form.errors.category"
+                                        />
+
+                                    </v-col>
+
+
+
+                                    <!-- Priority -->
+                                    <v-col cols="12" md="4">
+
+                                        <v-select
+                                            v-model="form.priority"
+                                            label="Priority"
+                                            variant="outlined"
+                                            :items="priorities"
+                                            :item-title="formatLabel"
+                                            item-value="this"
+                                            :error-messages="form.errors.priority"
+                                        />
+
+                                    </v-col>
+
+
+
+                                    <!-- Scope -->
+                                    <v-col cols="12" md="4">
+
+                                        <v-select
+                                            v-model="form.scope"
+                                            label="Scope"
+                                            variant="outlined"
+                                            clearable
+                                            :items="scopes"
+                                            :item-title="formatLabel"
+                                            item-value="this"
+                                        />
+
+                                    </v-col>
+
+
+                                </v-row>
+
+
+
+                                <v-divider class="my-6" />
+
+
+                                <!-- Actions -->
+                                <div class="d-flex justify-end ga-3">
+
+
+                                    <v-btn
+                                        variant="outlined"
+                                        color="grey"
+                                        :href="route('cds.submissions.index')"
+                                        as="a"
+                                    >
+                                        Cancel
+                                    </v-btn>
+
+
+
+                                    <v-btn
+                                        color="primary"
+                                        type="submit"
+                                        :loading="form.processing"
+                                    >
+                                        Create Proposal
+                                    </v-btn>
+
+
+                                </div>
+
+
+                            </v-form>
+
+
+                        </v-card-text>
+
+
+                    </v-card>
+
+
+                </v-col>
+
+            </v-row>
+
+
+        </v-container>
+
+
     </AuthenticatedLayout>
 </template>

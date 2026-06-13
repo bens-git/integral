@@ -3,7 +3,7 @@ import { ref, watch } from "vue";
 import { Head, router } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ProposalDialog from "@/Components/ProposalDialog.vue";
-import StoreProposalDialog from "@/Components/StoreProposalDialog.vue";
+import StoreSubmissionDialog from "@/Components/StoreSubmissionDialog.vue";
 
 const props = defineProps({
     submissions: Object,
@@ -248,7 +248,7 @@ function refresh() {
                                 Adjust your filters or create a new submission.
                             </div>
 
-                            <StoreProposalDialog @proposal-created="refresh" />
+<StoreSubmissionDialog @submission-created="refresh" />
                         </div>
                     </template>
                 </v-data-table-server>

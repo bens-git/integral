@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 
 import { computed } from "vue";
-import StoreProposalDialog from '@/Components/StoreProposalDialog.vue';
+import StoreSubmissionDialog from '@/Components/StoreSubmissionDialog.vue';
 
 function refresh() {
   // reload this page's props — fallback to full reload since Inertia core isn't available
@@ -83,7 +83,7 @@ const statCards = computed(() => {
 
                     <div class="d-flex ga-2 mt-4 mt-md-0">
                         <v-btn variant="text" class="me-2" @click.prevent="goProposals">View Submissions</v-btn>
-                        <StoreProposalDialog @proposal-created="refresh" />
+                        <StoreSubmissionDialog @submission-created="refresh" />
                     </div>
                 </div>
             </v-card>
