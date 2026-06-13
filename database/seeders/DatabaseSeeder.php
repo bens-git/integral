@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        // Demo users for testing
-        $this->call(DemoUsersSeeder::class);
+      
     }
 }
