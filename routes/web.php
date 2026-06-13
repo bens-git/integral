@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Broadcast;
 use Inertia\Inertia;
 use App\Http\Controllers\ChatController;
 
@@ -31,9 +30,6 @@ Route::middleware('web')->group(function () {
     Route::get('/login', [App\Http\Controllers\DemoAuthController::class, 'show'])->name('login');
     Route::post('/login', [App\Http\Controllers\DemoAuthController::class, 'login']);
 
-    Broadcast::routes(['middleware' => ['auth', 'verified']]);
-
-    require __DIR__ . '/channels.php';
     require __DIR__ . '/auth.php';
     require __DIR__ . '/cds.php';
 });

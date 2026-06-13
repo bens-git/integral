@@ -14,15 +14,6 @@
         <!-- Favicon -->
         <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
 
-        @php($broadcastDefault = config('broadcasting.default'))
-        @if($broadcastDefault && $broadcastDefault !== 'null')
-        <!-- Broadcast config -->
-        <meta name="broadcast-key" content="{{ config('broadcasting.connections.'.$broadcastDefault.'.key') }}">
-        <meta name="broadcast-host" content="{{ config('broadcasting.connections.'.$broadcastDefault.'.options.host') }}">
-        <meta name="broadcast-port" content="{{ config('broadcasting.connections.'.$broadcastDefault.'.options.port') }}">
-        <meta name="broadcast-scheme" content="{{ config('broadcasting.connections.'.$broadcastDefault.'.options.scheme') }}">
-        @endif
-
         <!-- Scripts -->
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])

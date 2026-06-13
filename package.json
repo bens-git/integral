@@ -20,8 +20,6 @@
     "dependencies": {
         "@inertiajs/inertia": "^0.11.1",
         "@mdi/font": "^7.4.47",
-        "laravel-echo": "^2.3.7",
-        "pusher-js": "^8.5.0",
         "vuetify": "^4.0.8"
     }
 }

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Broadcasting\Channel;
 
 class ChatMessage extends Model
 {
@@ -12,7 +11,6 @@ class ChatMessage extends Model
 
     protected $fillable = ['user_id', 'body'];
 
-    protected $broadcastWith = ['id', 'user', 'body', 'created_at'];
 
     public function user()
     {
