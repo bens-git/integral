@@ -36,8 +36,7 @@ class SubmissionController extends Controller
         }
 
         $submissions = Submission::query()
-            ->with('submitter')
-
+            ->with('submitter.user')
             ->when(
                 $request->filled('search'),
                 function ($query) use ($request) {
@@ -238,5 +237,17 @@ class SubmissionController extends Controller
 
         return redirect()->route('cds.submissions.show', $submission)
             ->with('success', 'Submission submitted for validation.');
+    }
+
+    public function destroy(Submission $submission)
+    {
+        if ($submission->submitter->user_id !== Auth::id()) {
+            abort(403, 'You can only delete your own submissions.');
+        }
+
+        $submission->delete();
+
+        return redirect()->route('cds.submissions.index')
+            ->with('success', 'Submission deleted successfully.');
     }
 }

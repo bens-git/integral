@@ -31,6 +31,7 @@ Route::middleware(['auth', 'verified'])->prefix('cds')->name('cds.')->group(func
     Route::get('/submissions/{submission}/edit', [SubmissionController::class, 'edit'])->name('submissions.edit');
     Route::patch('/submissions/{submission}', [SubmissionController::class, 'update'])->name('submissions.update');
     Route::post('/submissions/{submission}/submit', [SubmissionController::class, 'submit'])->name('submissions.submit');
+    Route::delete('/submissions/{submission}', [SubmissionController::class, 'destroy'])->name('submissions.destroy');
 
     // Issues (Decision Issues)
     Route::get('/issues', [IssueController::class, 'index'])->name('issues.index');

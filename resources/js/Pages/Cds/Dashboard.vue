@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 
 import { computed } from "vue";
-import StoreSubmissionDialog from '@/Components/StoreSubmissionDialog.vue';
+import StoreSubmissionDialog from '@/Pages/Cds/Submissions/StoreSubmissionDialog.vue';
 
 function refresh() {
   // reload this page's props — fallback to full reload since Inertia core isn't available

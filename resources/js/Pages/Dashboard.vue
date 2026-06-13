@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
-import StoreSubmissionDialog from '@/Components/StoreSubmissionDialog.vue';
+import StoreSubmissionDialog from '@/Pages/Cds/Submissions/StoreSubmissionDialog.vue';
 
 const page = usePage();
 const user = computed(() => page.props.user || page.props.auth?.user || null);

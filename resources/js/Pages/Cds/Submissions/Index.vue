@@ -1,9 +1,13 @@
 <script setup>
-import { ref, watch } from "vue";
-import { Head, router } from "@inertiajs/vue3";
+import { ref, watch, computed } from "vue";
+import { Head, router, usePage } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import ProposalDialog from "@/Components/ProposalDialog.vue";
-import StoreSubmissionDialog from "@/Components/StoreSubmissionDialog.vue";
+import DestroySubmissionDialog from "@/Pages/Cds/Submissions/DestroySubmissionDialog.vue";
+import SubmissionDialog from "@/Pages/Cds/Submissions/SubmissionDialog.vue";
+import StoreSubmissionDialog from "@/Pages/Cds/Submissions/StoreSubmissionDialog.vue";
+
+const page = usePage();
+const currentUser = computed(() => page.props.auth.user);
 
 const props = defineProps({
     submissions: Object,
@@ -131,7 +135,7 @@ function refresh() {
             <div class="d-flex align-center justify-space-between">
                 <h2 class="text-h5 font-weight-medium">CDS Submissions</h2>
 
-                <StoreProposalDialog @proposal-created="refresh" />
+                <StoreSubmissionDialog @submission-created="refresh" />
             </div>
         </template>
 
@@ -177,7 +181,7 @@ function refresh() {
                             clearable
                             style="max-width: 220px"
                             :items="[
-                                'Proposal',
+                                'Submission',
                                 'Issue',
                                 'Objection',
                                 'Comment',
@@ -228,7 +232,7 @@ function refresh() {
                     </template>
 
                     <template #item.actions="{ item }">
-                        <ProposalDialog :proposal="item">
+                        <SubmissionDialog :submission="item">
                             <template #activator="{ props }">
                                 <v-btn
                                     icon="mdi-eye"
@@ -237,7 +241,18 @@ function refresh() {
                                     v-bind="props"
                                 />
                             </template>
-                        </ProposalDialog>
+                        </SubmissionDialog>
+                        <DestroySubmissionDialog :submission="item" @submission-destroyed="refresh" v-if="item.submitter?.user_id === currentUser.id">
+                            <template #activator="{ props }">
+                                <v-btn
+                                    icon="mdi-delete"
+                                    size="small"
+                                    variant="text"
+                                    color="error"
+                                    v-bind="props"
+                                />
+                            </template>
+                        </DestroySubmissionDialog>
                     </template>
 
                     <template #no-data>
