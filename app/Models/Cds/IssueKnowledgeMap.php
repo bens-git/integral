@@ -10,6 +10,7 @@ class IssueKnowledgeMap extends Model
 {
     use HasFactory;
 
+    protected $table = 'issue_knowledge_map';
     protected $keyType = 'string';
     public $incrementing = false;
 

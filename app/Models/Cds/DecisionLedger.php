@@ -11,6 +11,7 @@ class DecisionLedger extends Model
 {
     use HasFactory;
 
+    protected $table = 'decision_ledger';
     protected $keyType = 'string';
     public $incrementing = false;
 

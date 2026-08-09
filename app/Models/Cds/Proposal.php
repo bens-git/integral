@@ -13,6 +13,7 @@ class Proposal extends Submission
 {
     use HasFactory;
 
+    protected $table = 'submissions';
     protected $keyType = 'string';
     public $incrementing = false;
 

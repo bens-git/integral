@@ -10,6 +10,7 @@ class Objection extends Model
 {
     use HasFactory;
 
+    protected $table = 'objection_map';
     protected $keyType = 'string';
     public $incrementing = false;
 
